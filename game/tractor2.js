@@ -28,7 +28,7 @@ var Tractor = function()
   this.trac.rotation = 0;
   this.trac.targetRotation = 0;
   this.trac.moveTimer = 1;
-  this.trac.speed = 3;
+  this.trac.speed = 30;
   this.trac.next = null;
   this.trac.type = 1;
   this.trac.addCart = function(it) {
@@ -56,7 +56,12 @@ var Tractor = function()
     }
 
     it.next.prevPos = it.next.pos.copy();
-    it.next.pos = it.prevPos.copy();
+    // it.next.pos = it.prevPos.copy();
+
+    var step = p5.Vector.sub(it.prevPos, it.next.pos);
+    step.mult(0.1);
+    it.next.pos.add(step);
+
     it.next.scale = it.scale;
     it.next.rotation = p5.Vector.sub(it.next.prevPos, it.prevPos).heading();
     // next one pulls
@@ -194,8 +199,8 @@ var Tractor = function()
   {
     var vec = createVector(-1, 0);
     vec.rotate(this.trac.rotation);
-    vec.x *= this.trac.step.x;
-    vec.y *= this.trac.step.x;
+    vec.x *= this.trac.step.x*0.1;
+    vec.y *= this.trac.step.x*0.1;
 
     var targetPos = p5.Vector.add(this.trac.pos, vec);
     if (targetPos.x < this.size.min.x || targetPos.x > this.size.max.x || targetPos.y < this.size.min.y || targetPos.y > this.size.max.y) {
